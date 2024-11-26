@@ -52,7 +52,7 @@ class TestSmartRoom(unittest.TestCase):
         self.assertTrue(sr.light_on)
 
     @patch.object(GPIO, "output")
-    def test_manage_light_level_on(self, mock_gpio: Mock):
+    def test_manage_light_level_off(self, mock_gpio: Mock):
         sr = SmartRoom()
         mock_gpio.return_value = False
         sr.manage_light_level()
