@@ -22,3 +22,10 @@ class TestSmartRoom(unittest.TestCase):
         occupacy = sr.check_room_occupancy()
         self.assertTrue(occupacy)
 
+
+    @patch.object(GPIO, "input")
+    def test_check_room_occupancy_returns_false(self, mock_gpio: Mock):
+        sr = SmartRoom()
+        mock_gpio.return_value = False
+        occupacy = sr.check_room_occupancy()
+        self.assertFalse(occupacy)
