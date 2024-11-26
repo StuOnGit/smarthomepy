@@ -72,3 +72,12 @@ class TestSmartRoom(unittest.TestCase):
         sr.manage_window()
         window_is_open = sr.window_open
         self.assertFalse(window_is_open)
+
+    @patch.object(SenseairS8, "co2", new_callable=PropertyMock)
+    @patch.object(GPIO, "output")
+    def test_monitor_air_quality_fan_on(self, mock_gpio: Mock, co2: PropertyMock):
+        sr = SmartRoom()
+        mock_gpio.return_value = True
+        co2.return_value = 801
+        sr.monitor_air_quality()
+        self.assertTrue(sr.fan_on)
