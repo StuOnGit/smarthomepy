@@ -53,8 +53,7 @@ class SmartRoom:
         return GPIO.input(self.PHOTO_PIN)
 
     def manage_light_level(self) -> None:
-        # To be implemented
-        pass
+        self.light_on = GPIO.output(self.LED_PIN)
 
     def manage_window(self) -> None:
         # To be implemented
@@ -63,7 +62,6 @@ class SmartRoom:
     def monitor_air_quality(self) -> None:
         # To be implemented
         pass
-
 
     def change_servo_angle(self, duty_cycle):
         """
