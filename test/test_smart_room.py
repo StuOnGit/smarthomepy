@@ -65,3 +65,12 @@ class TestSmartRoom(unittest.TestCase):
         window_is_open = sr.window_open
         print(sr.window_open)
         self.assertTrue(window_is_open)
+
+    @patch.object(Adafruit_BMP280_I2C, "temperature", new_callable=PropertyMock)
+    def test_manage_window_closed(self, temperature: PropertyMock):
+        sr = SmartRoom()
+        temperature.side_effect = [20, 18]
+        sr.manage_window()
+        window_is_open = sr.window_open
+        print(sr.window_open)
+        self.assertFalse(window_is_open)
