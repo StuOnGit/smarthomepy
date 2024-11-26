@@ -63,21 +63,30 @@ class SmartRoom:
     def manage_window(self) -> None:
         temp_indor = self.bmp280_indor.temperature
         temp_outdoor = self.bmp280_outdoor.temperature
-        if temp_indor >= 18 and temp_indor <= 30:
-            if temp_outdoor >= 18 and temp_outdoor <= 30:
+        if 18 <= temp_indor <= 30:
+            if 18 <= temp_outdoor <= 30:
                 difference = temp_outdoor - temp_indor
-                if (difference) >= 2:
+                if difference >= 2:
                     #window open
                     self.change_servo_angle((180/18) + 2)
                     self.window_open = True
-                elif (difference) <= 2:
+                elif difference <= 2:
                     #window closed
                     self.change_servo_angle((0 / 18) + 2)
                     self.window_open = False
 
     def monitor_air_quality(self) -> None:
-        # To be implemented
-        pass
+        co2 = self.sensair_s8.co2()
+        if co2 >= 800:
+            GPIO.output(self.FAN_PIN, GPIO.HIGH)
+            self.fan_on = True
+            if DEPLOYMENT:  # Sleep only if you are deploying on the actual hardware
+                time.sleep(1) # here the time to wait until the fan finishes
+        elif co2 < 500:
+            GPIO.output(self.FAN_PIN, GPIO.LOW)
+            self.fan_on = False
+            if DEPLOYMENT:  # Sleep only if you are deploying on the actual hardware
+                time.sleep(1)  # here the time to wait until the fan finishes
 
     def change_servo_angle(self, duty_cycle):
         """
