@@ -22,7 +22,6 @@ class TestSmartRoom(unittest.TestCase):
         occupacy = sr.check_room_occupancy()
         self.assertTrue(occupacy)
 
-
     @patch.object(GPIO, "input")
     def test_check_room_occupancy_returns_false(self, mock_gpio: Mock):
         sr = SmartRoom()
@@ -58,6 +57,10 @@ class TestSmartRoom(unittest.TestCase):
         sr.manage_light_level()
         self.assertFalse(sr.light_on)
 
-
-   # @patch.object(new_callable=PropertyMock)
-   # @patch.object(GPIO, "output")
+    @patch.object(Adafruit_BMP280_I2C,"temperature", new_callable=PropertyMock )
+    def test_manage_window_open_with_change_duty(self, temperature: PropertyMock):
+        sr = SmartRoom()
+        temperature.side_effect =  [18, 20]
+        sr.manage_window()
+        window_is_open = sr.window_open
+        self.assertTrue(window_is_open)
